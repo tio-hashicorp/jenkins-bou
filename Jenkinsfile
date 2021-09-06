@@ -222,6 +222,9 @@ def waitForRun(runid) {
         println('Status: ' + status)
 
         // If a policy requires an override, prompt in the pipeline
+        if (status == 'planned') 
+            break;
+
         if (status.startsWith('approve_policy')) {
             def override
             try {
@@ -479,7 +482,7 @@ pipeline {
             }
         }
 
-        stage('Change Variables') {
+        stage('Modify Parameters') {
             steps {
                 script {
                     TFE_VARS = getWorkspaceVars(env.TF_WORKSPACE_ID, ['owner', 'prefix'])
