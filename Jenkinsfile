@@ -396,6 +396,8 @@ pipeline {
   parameters {
       string(name: 'ORGANIZATION', defaultValue: 'innovation-lab', description: '')
       string(name: 'WORKSPACE_NAME', defaultValue: 'terraform-simple-instance', description: '')
+      string(name: 'HOSTNAME', defaultValue: 'lxpocsgv860')
+      string(name: 'IP', defaultValue: '172.29.222.84')
   }
   environment {
           AWS_ACCESS_KEY_ID = "AKIAWSEH7GKTNQXQMO4V"
@@ -442,6 +444,9 @@ pipeline {
         stage('Get Workspace Id') {
             steps{
                 script {
+                    echo "BEARER_TOKEN=${env.BEARER_TOKEN}"
+                }
+                script {
                     env.TF_WORKSPACE_ID =  getWorkspaceId(env.TF_ORG_NAME, env.TF_WORKSPACE_NAME)
                 }
                 echo "TF_ORG_NAME is ${env.TF_ORG_NAME}"
@@ -463,7 +468,9 @@ pipeline {
             steps {
                 script {
                     TFE_VARS = getWorkspaceVars(TF_WORKSPACE_ID, ['vm_hostname', 'vm_ip'])
-
+                    println TFE_VARS
+                }
+                script {
                     updateWorkspaceVar(WORKSPACE_ID, TFE_VARS.get('vm_hostname'), 'vm_hostname', "${params.HOSTNAME}")
                     updateWorkspaceVar(WORKSPACE_ID, TFE_VARS.get('vm_ip'), 'vm_ip', "${params.IP}")
                 }
