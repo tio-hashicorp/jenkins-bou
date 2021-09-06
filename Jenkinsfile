@@ -470,21 +470,6 @@ pipeline {
             }
         }
 
-        stage('WorkspacePlanCheck') {
-            steps {
-                script {
-                    plan_url = waitForPlan(PLAN_ID)
-                    println(plan_url)
-
-                    //sh """ #!/bin/bash
-                    //    echo 
-                    //    echo 'Downloading Plan File for build ${BUILD_NUMBER}'
-                    //    wget -O ${BUILD_NUMBER}.txt $plan_url
-                    //"""
-                }
-            }
-        }
-
         stage('WorkspaceRun') {
             steps{
                 script {
