@@ -460,10 +460,14 @@ pipeline {
         }
 
         stage('Change Variables') {
-            TFE_VARS = getWorkspaceVars(TF_WORKSPACE_ID, ['vm_hostname', 'vm_ip'])
+            steps {
+                script {
+                    TFE_VARS = getWorkspaceVars(TF_WORKSPACE_ID, ['vm_hostname', 'vm_ip'])
 
-            updateWorkspaceVar(WORKSPACE_ID, TFE_VARS.get('vm_hostname'), 'vm_hostname', "${params.HOSTNAME}")
-            updateWorkspaceVar(WORKSPACE_ID, TFE_VARS.get('vm_ip'), 'vm_ip', "${params.IP}")
+                    updateWorkspaceVar(WORKSPACE_ID, TFE_VARS.get('vm_hostname'), 'vm_hostname', "${params.HOSTNAME}")
+                    updateWorkspaceVar(WORKSPACE_ID, TFE_VARS.get('vm_ip'), 'vm_ip', "${params.IP}")
+                }
+            }
         }
 
         stage('WorkspacePlanCheck') {
