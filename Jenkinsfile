@@ -432,7 +432,6 @@ pipeline {
           ROLE_ID="9641db0a-4b4d-576b-71ab-196106a82271"
           SECRET_ID=credentials("SECRET_ID")
 
-          //BEARER_TOKEN = "ECReMbuw02A2cw.atlasv1.JvPqUHbs6OnEkfzq1d4nyXNLVcvTw4O0IPzz2dg89uTz4aFenR1uv8d5E7sQmOktXNc"
           //TF_RUN_ID = "${params.RUN_ID}"
           TF_WORKSPACE_NAME = "${params.WORKSPACE_NAME}"
           TF_ORG_NAME =  "${params.ORGANIZATION}"
@@ -440,31 +439,19 @@ pipeline {
     }
 
     stages {
-                stage('declareTokenEnvVar') {
+        stage('Get Token fromVault') {
             steps {
                 script {
                     // created imperatively, so we can modified & used at later stages
                     env.BEARER_TOKEN = "notatoken"
                 }
-            }
-        }
-
-        stage('assignToken') {
-            steps {
                 script {
                     withVault([configuration: configuration, vaultSecrets: secrets]) {
                         env.BEARER_TOKEN = env.api_token
-                    }
                 }
             }
         }
 
-        stage('printToken') {
-            steps {
-                echo "BEARER_TOKEN=${env.BEARER_TOKEN}"
-            }
-        }
-        
         stage('Get Workspace Id') {
             steps{
                 script {
@@ -473,10 +460,12 @@ pipeline {
                 script {
                     env.TF_WORKSPACE_ID =  getWorkspaceId(env.TF_ORG_NAME, env.TF_WORKSPACE_NAME)
                 }
-                echo "TF_ORG_NAME is ${env.TF_ORG_NAME}"
-                echo "TF_WORKSPACE_NAME is ${env.TF_WORKSPACE_NAME}"
-                echo "TF_WORKSPACE_ID is ${env.TF_WORKSPACE_ID}"
-                echo "AWS_REGION is $AWS_REGION"
+                script {
+                    echo "TF_ORG_NAME is ${env.TF_ORG_NAME}"
+                    echo "TF_WORKSPACE_NAME is ${env.TF_WORKSPACE_NAME}"
+                    echo "TF_WORKSPACE_ID is ${env.TF_WORKSPACE_ID}"
+                    echo "AWS_REGION is $AWS_REGION"
+                }
             }
         }
 
