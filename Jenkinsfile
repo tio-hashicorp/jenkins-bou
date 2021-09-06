@@ -302,6 +302,7 @@ def getRunStatus(runid) {
       result = 'planning'
       break
         case 'planned':
+        case 'planned_and_finished':
       result = 'planned'
       break
         case 'cost_estimating':
