@@ -168,6 +168,30 @@ def listLiveRun(workspaceid) {
     return live_runs
 }
 
+def waitForPlan(runid) {
+  def status =''
+  while (status!="errored") {
+    status = getPlanStatus(runid)
+    println('Status: ' + status)
+    // // If a policy requires an override, prompt in the pipeline
+    // if (status == 'finished') {
+    //   def getPlanResults = getPlanResults(runid)
+    //   return getPlanResults
+    // }
+    switch (status) {
+        case 'finished':
+          def getPlanResults = getPlanResults(runid)
+          return getPlanResults
+        case 'errored':
+          println "Plan failed"
+          return 0
+    }
+
+    sleep(2)
+  }
+}
+
+
 def getPlanStatus(runid) {
     def result = ''
     def response = httpRequest(
@@ -471,8 +495,8 @@ pipeline {
                     println TFE_VARS
                 }
                 script {
-                    updateWorkspaceVar(env.TF_WORKSPACE_ID, TFE_VARS.get('owner'), 'owner', "${params.OWNER}")
-                    updateWorkspaceVar(env.TF_WORKSPACE_ID, TFE_VARS.get('prefix'), 'prefix', "${params.PREFIX}")
+                    updateWorkspaceVar(env.TF_WORKSPACE_ID, TFE_VARS.get('owner'), 'owner', params.OWNER)
+                    updateWorkspaceVar(env.TF_WORKSPACE_ID, TFE_VARS.get('prefix'), 'prefix', params.PREFIX)
                 }
             }
         }
