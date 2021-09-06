@@ -467,12 +467,12 @@ pipeline {
         stage('Change Variables') {
             steps {
                 script {
-                    TFE_VARS = getWorkspaceVars(TF_WORKSPACE_ID, ['vm_hostname', 'vm_ip'])
+                    TFE_VARS = getWorkspaceVars(env.TF_WORKSPACE_ID, ['vm_hostname', 'vm_ip'])
                     println TFE_VARS
                 }
                 script {
-                    updateWorkspaceVar(WORKSPACE_ID, TFE_VARS.get('vm_hostname'), 'vm_hostname', "${params.HOSTNAME}")
-                    updateWorkspaceVar(WORKSPACE_ID, TFE_VARS.get('vm_ip'), 'vm_ip', "${params.IP}")
+                    updateWorkspaceVar(env.TF_WORKSPACE_ID, TFE_VARS.get('vm_hostname'), 'vm_hostname', "${params.HOSTNAME}")
+                    updateWorkspaceVar(env.TF_WORKSPACE_ID, TFE_VARS.get('vm_ip'), 'vm_ip', "${params.IP}")
                 }
             }
         }
@@ -516,5 +516,5 @@ pipeline {
                 }
             }
         }
-    } //stages
+    } //stage
 } //pipeline
