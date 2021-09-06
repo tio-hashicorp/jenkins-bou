@@ -448,12 +448,13 @@ pipeline {
                 script {
                     withVault([configuration: configuration, vaultSecrets: secrets]) {
                         env.BEARER_TOKEN = env.api_token
+                    }
                 }
             }
         }
 
         stage('Get Workspace Id') {
-            steps{
+            steps {
                 script {
                     echo "BEARER_TOKEN=${env.BEARER_TOKEN}"
                 }
