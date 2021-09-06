@@ -396,8 +396,8 @@ pipeline {
   parameters {
       string(name: 'ORGANIZATION', defaultValue: 'innovation-lab', description: '')
       string(name: 'WORKSPACE_NAME', defaultValue: 'terraform-simple-instance', description: '')
-      string(name: 'HOSTNAME', defaultValue: 'lxpocsgv860')
-      string(name: 'IP', defaultValue: '172.29.222.84')
+      string(name: 'OWNER', defaultValue: 'lxpocsgv860')
+      string(name: 'PREFIX', defaultValue: '172.29.222.84')
   }
   environment {
           AWS_ACCESS_KEY_ID = "AKIAWSEH7GKTNQXQMO4V"
@@ -467,12 +467,12 @@ pipeline {
         stage('Change Variables') {
             steps {
                 script {
-                    TFE_VARS = getWorkspaceVars(env.TF_WORKSPACE_ID, ['vm_hostname', 'vm_ip'])
+                    TFE_VARS = getWorkspaceVars(env.TF_WORKSPACE_ID, ['owner', 'prefix'])
                     println TFE_VARS
                 }
                 script {
-                    updateWorkspaceVar(env.TF_WORKSPACE_ID, TFE_VARS.get('vm_hostname'), 'vm_hostname', "${params.HOSTNAME}")
-                    updateWorkspaceVar(env.TF_WORKSPACE_ID, TFE_VARS.get('vm_ip'), 'vm_ip', "${params.IP}")
+                    updateWorkspaceVar(env.TF_WORKSPACE_ID, TFE_VARS.get('owner'), 'owner', "${params.OWNER}")
+                    updateWorkspaceVar(env.TF_WORKSPACE_ID, TFE_VARS.get('prefix'), 'prefix', "${params.PREFIX}")
                 }
             }
         }
