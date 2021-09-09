@@ -428,12 +428,6 @@ pipeline {
       string(name: 'PREFIX', defaultValue: '172.29.222.84')
   }
   environment {
-          AWS_ACCESS_KEY_ID = "AKIAWSEH7GKTNQXQMO4V"
-          AWS_SECRET_ACCESS_KEY = "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"
-          AWS_REGION = "ap-southeast-1"
-
-          VAULT_ADDR="http://192.168.1.73:8200"
-          ROLE_ID="9641db0a-4b4d-576b-71ab-196106a82271"
           SECRET_ID=credentials("SECRET_ID")
 
           //TF_RUN_ID = "${params.RUN_ID}"
